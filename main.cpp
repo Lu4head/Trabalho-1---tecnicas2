@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -18,9 +19,10 @@ char* toBinary(int n, int tamanho) {
 
 int main(){
         srand(time(NULL));
-        int tamanho_populacao[3] = {10,100,1000};
+        const int tamanho_populacao = 10;
         float crossover = 0 , mutacao = 0;
         int geracoes = 1;
+        cout << "Qual será a taxa de crossover (0 -> 90%)? : ";
         cin >> crossover;
         cout << "Qual será a taxa de mutação (0 -> 90%)? : ";
         cin >> mutacao;
@@ -30,7 +32,7 @@ int main(){
         cout << endl;
         for (int i = 0; i < 3; i++)
         {
-            cout << "Tamanho da população "<< i <<" = " << tamanho_populacao[i] << endl; 
+            cout << "Tamanho da população "<< i <<" = " << tamanho_populacao << endl; 
         }
         cout << "Taxa de crossover escolhida: " << crossover << " %" << endl;
         cout << "Taxa de mutação escolhida: " << mutacao << " %" << endl;
@@ -41,18 +43,18 @@ int main(){
 
         cout << endl;
 
-        int populacao[10];
-        int tamanho_individuo = 16;
-        for (int i = 0; i < 3; i++){
-            int individuo = rand() % 8589934591;
-            char* ptr = toBinary(individuo, tamanho_individuo);
-            for (int i = 0 ; i < tamanho_individuo ; i++){
-                cout << ptr[i] << " ";
+        const unsigned short tamanho_individuo = 16;
+        char* indiv_binario;
+        char populacao[tamanho_populacao][tamanho_individuo];
+        for (int i = 0; i < tamanho_populacao; i++){
+            unsigned long range = pow(2 , tamanho_individuo);
+            unsigned individuo = rand() % range;
+            indiv_binario = toBinary(individuo, tamanho_individuo);
+            for (int j = 0 ; j < tamanho_individuo ; j++){
+                populacao[i][j] = indiv_binario[j];
+                cout << indiv_binario[j] << " ";
             }
             cout << "     =    " << individuo << endl;
             cout << endl;
-            
-        }
-
-
+        }           
 }
