@@ -17,8 +17,27 @@ char* toBinary(int n, int tamanho) {
   return r;
 }
 
+string toBinary(int n, int tamanho) {
+  string r = "";
+  while (n != 0) {
+        r.append = (n % 2 == 0 ? '0' : '1');
+        n /= 2;
+  }
+  return r;
+}
+
+// tamanho população
+// n de gerações
+// taxa de mutação
+// intervalo minimo e max de numero aleatório (limitante da população inicial)
+// inserir valores de a,b,c,d,e,f p/ equação de quinto grau (p/ futura comparação)
+// tamanho do indivíduo = tamanho de um int = 4bytes = 32 bits
+// chance de um bit alterar seu valor
+// altera apenas 1 bit em cada indivíduo por vez (bit sorteado)
+
+
 int main(){
-        srand(time(NULL));
+        srand(time(NULL)); // Cria seed para geração de numeros aleatórios com base  
         const int tamanho_populacao = 10;
         float crossover = 0 , mutacao = 0;
         int geracoes = 1;
@@ -47,8 +66,8 @@ int main(){
         char* indiv_binario;
         char populacao[tamanho_populacao][tamanho_individuo];
         for (int i = 0; i < tamanho_populacao; i++){
-            unsigned long range = pow(2 , tamanho_individuo);
-            unsigned individuo = rand() % range;
+            long range = pow(2 , tamanho_individuo);
+            individuo = rand() % range;
             indiv_binario = toBinary(individuo, tamanho_individuo);
             for (int j = 0 ; j < tamanho_individuo ; j++){
                 populacao[i][j] = indiv_binario[j];
