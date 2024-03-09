@@ -17,14 +17,15 @@ char* toBinary(int n, int tamanho) {
   return r;
 }
 
-string toBinary(int n, int tamanho) {
-  string r = "";
-  while (n != 0) {
-        r.append = (n % 2 == 0 ? '0' : '1');
-        n /= 2;
-  }
-  return r;
-}
+
+// string toBinary(int n, int tamanho) {
+//   string r = "";
+//   while (n != 0) {
+//         r.append = (n % 2 == 0 ? '0' : '1');
+//         n /= 2;
+//   }
+//   return r;
+// }
 
 // tamanho população
 // n de gerações
@@ -34,7 +35,7 @@ string toBinary(int n, int tamanho) {
 // tamanho do indivíduo = tamanho de um int = 4bytes = 32 bits
 // chance de um bit alterar seu valor
 // altera apenas 1 bit em cada indivíduo por vez (bit sorteado)
-
+// objetivo é chegar o mais próximo possível da raiz de uma função de 5º grau
 
 int main(){
         srand(time(NULL)); // Cria seed para geração de numeros aleatórios com base  
