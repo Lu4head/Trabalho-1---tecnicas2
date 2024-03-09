@@ -1,7 +1,5 @@
 #include <iostream>
 #include <random>
-#include <string>
-#include <math.h>
 
 using namespace std;
 
@@ -63,12 +61,12 @@ int main(){
 
         cout << endl;
 
-        const unsigned short tamanho_individuo = 16;
+        const unsigned short tamanho_individuo = 32;
         char* indiv_binario;
         char populacao[tamanho_populacao][tamanho_individuo];
         for (int i = 0; i < tamanho_populacao; i++){
             long range = pow(2 , tamanho_individuo);
-            individuo = rand() % range;
+            long individuo = rand() % range;
             indiv_binario = toBinary(individuo, tamanho_individuo);
             for (int j = 0 ; j < tamanho_individuo ; j++){
                 populacao[i][j] = indiv_binario[j];
