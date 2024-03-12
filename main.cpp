@@ -61,10 +61,10 @@ int main(){
     cout << endl;
     for(int i = 0 ; i < max_geracoes ; i++){
         // avaliar população
-        if(){
+        //if(){
             // armazenar o melhor individuo ate o momento
             //fórmula p/ comparação = a*pow(n,5)+b*pow(n,4)+c*pow(n,3)+d*pow(n,2)+e*n+f = 0 , a != 0
-        }
+        //}
         
         // verificar se a solução está aceitável (se sim, encerrar laço)
         // selecionar os melhores indivíduos
