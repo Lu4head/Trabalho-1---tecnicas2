@@ -12,10 +12,10 @@ Pedro Dezem                     RA:
 using namespace std;
 
 // Variáveis globais:
-const unsigned n_individuos_populacao = 10;
-const float taxa_de_elitismo = 0.3;
+const unsigned n_individuos_populacao = 10; // Tamanho da população
+const float taxa_de_elitismo = 0.3; // Números q n vão mudar, tipo, selecionou o melhor e vai manter quantos numeros
 const int n_de_elites = n_individuos_populacao * taxa_de_elitismo;
-int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1;
+int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1; // Parâmetros da função
 // Structs:
 struct Populacao{
     int individuos[n_individuos_populacao] = {0};
@@ -23,7 +23,7 @@ struct Populacao{
 
 // Definição das Funções:
 
-/*
+/* Isso aq ignora, eu tava vendo umas ideias de como fzr isso, metade aq n vai usar, e a outra vai usar diferente do q ta aq
 Funções necessárias:
 .cria_populacao_inicial();
 .int Avalia(char F[50]);
@@ -45,33 +45,33 @@ Populacao cria_populacao_inicial(int min, int max){
     return Populacao_criada;
 }
 
-void realiza_crossover(Populacao &populacao){
-    for(int individuo ; individuo < n_individuos_populacao ; individuo++){
-    int posicao_bit = rand() % 32;
-    populacao.individuos[individuo] ^= (1 << posicao_bit);
-    }
+void realiza_mutacao(Populacao &populacao){ 
+    for(int n ; n < n_individuos_populacao ; n++){
+    int posicao_bit = rand() % 32; // Sorteia um bit dentre os 32 de um inteiro
+    populacao.individuos[n] ^= (1 << posicao_bit); // Altera esse bit
+    }// Ele faz um rand e essa alteração pra cada individuo da lista
 }
 
-int avalia_individuo(int valor_individuo){
+int avalia_individuo(int valor_individuo){ 
     int nota = abs(a*pow(valor_individuo,5)+b*pow(valor_individuo,4)+c*pow(valor_individuo,3)+d*pow(valor_individuo,2)+e*valor_individuo+f);
     return nota;
 }
 
-Populacao elitismo(Populacao &populacao){
-    int lista_aux[n_individuos_populacao], aux;
+Populacao elitismo(Populacao &populacao){ // tenho q renomear a função dps, mas ela basicamente ordena a lista pela nota e separa os individuos melhores q n serão alterados
+    int lista_aux[n_individuos_populacao], aux; // essa lista é meio q a lista das notas de cada individuo
     for(int i = 0 ; i < n_individuos_populacao ; i++){
         lista_aux[i] = avalia_individuo(populacao.individuos[i]);
         cout << "Nota de " << populacao.individuos[i] << " é igual a : " << avalia_individuo(populacao.individuos[i]) << endl;
-    }
-    for (int i = 0; i < n_individuos_populacao - 1; i++) { // Bubble sort para organizar as maiores notas no começo da lista
+    } // esse cout é pra debug, sim sim
+    for (int i = 0; i < n_individuos_populacao - 1; i++) { // Bubble sort para organizar as melhores notas no começo da lista
         for (int j = 0; j < n_individuos_populacao - i - 1; j++) {
             if (lista_aux[j] > lista_aux[j + 1]) {
                 // Troca os elementos se estiverem na ordem errada
-                aux = lista_aux[j];
+                aux = lista_aux[j]; 
                 lista_aux[j] = lista_aux[j + 1];
                 lista_aux[j + 1] = aux;
 
-                aux = populacao.individuos[j];
+                aux = populacao.individuos[j]; // Essa parte ordena a lista original de individuos
                 populacao.individuos[j] = populacao.individuos[j + 1];
                 populacao.individuos[j + 1] = aux;
             }
@@ -80,19 +80,19 @@ Populacao elitismo(Populacao &populacao){
     cout << "Lista de notas ordenada: " << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << lista_aux[i] << " | ";
-    }
+    } // Pra debug tbm
     cout << endl;
-    Populacao populacao_pais;
-    for(int i = 0 ; i < n_de_elites ; i++){
-        populacao_pais.individuos[i] = populacao.individuos[i];
+    Populacao populacao_pais; 
+    for(int i = 0 ; i < n_de_elites ; i++){ // n_de_elites é o numero de individuos * taxa_de_elites q a gente definir, no caso ta 10 * 0.1 = 1 individuo
+        populacao_pais.individuos[i] = populacao.individuos[i]; // Faz o primeiro individuo da populacao_pais ser o com a melhor nota
     }
-    return populacao_pais;
+    return populacao_pais; // Retorna a populacao_pais, q por enqnt tem só o melhor individuo e o resto é 0
 }
 
-void cruza(Populacao &populacao_principal, Populacao &populacao_pais , float crossover){
+void cruza(Populacao &populacao_principal, Populacao &populacao_pais){
     // Determinar o ponto de cruzamento (metade do número de bits)
     int n_bits = sizeof(int) * 8;
-    int crossover_point = n_bits * crossover;
+    int crossover_point = n_bits / 2;
 
     for(int i = n_de_elites ; i < n_individuos_populacao ; i++){
     // Criar uma máscara para selecionar a primeira metade dos bits
@@ -180,12 +180,12 @@ int main(){
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_de_pais.individuos[i] << " | ";
     }
-    cruza(Populacao_principal, Populacao_de_pais, crossover);
+    cruza(Populacao_principal, Populacao_de_pais);
     cout << "\nLista de pais cruzada :" << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_de_pais.individuos[i] << " | ";
     }
-    realiza_crossover(Populacao_de_pais);
+    realiza_mutacao(Populacao_de_pais);
     cout << "\nLista de pais após crossover :" << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_de_pais.individuos[i] << " | ";
