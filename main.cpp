@@ -185,6 +185,11 @@ int main(){
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_de_pais.individuos[i] << " | ";
     }
+    realiza_crossover(Populacao_de_pais);
+    cout << "\nLista de pais após crossover :" << endl;
+    for (int i = 0; i < n_individuos_populacao ; i++){
+        cout << Populacao_de_pais.individuos[i] << " | ";
+    }
     return 0;
 }
 
