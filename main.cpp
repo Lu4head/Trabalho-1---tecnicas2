@@ -190,7 +190,7 @@ int main(){
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_de_pais.individuos[i] << " | ";
     }
-    return 0;
+    return 0; //a
 }
 
 // tamanho população
