@@ -66,9 +66,11 @@ int main(){
         //}
 
          //verificar se a solução está aceitável (se sim, encerrar laço)
-         //selecionar os melhores indivíduos
-         //aplicar cruzamento com crossover
-         //aplicar mutação
+         // O melhor não é alterado.
+         // Guardar os outros 4 melhores, ou sortear eles
+         // Criar filhos dos mesmos com o cruzamento (preencher o vetor novamente com esse cruzamento)
+         // aplicar mutaçao nos 9, com a chance dela ocorrer ou não.
+         // Refazer o processo de avaliação.
     }
 
 }
