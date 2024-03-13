@@ -77,7 +77,7 @@ Populacao elitismo(Populacao &populacao){
             }
         }
     }
-
+    cout << "Lista de notas ordenada: " << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << lista_aux[i] << " | ";
     }
@@ -154,7 +154,7 @@ int main(){
         cout << Populacao_principal.individuos[i] << " | ";
     }
     cout << endl;
-    cout << "Lista de notas ordenada: " << endl;
+    
     Populacao Populacao_de_pais = elitismo(Populacao_principal);
     cout << "\nLista principal ordenada: " << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
