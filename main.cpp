@@ -13,7 +13,8 @@ using namespace std;
 
 // Variáveis globais:
 const unsigned n_individuos_populacao = 10;
-const unsigned taxa_de_elitismo = 0.9;
+const float taxa_de_elitismo = 0.3;
+const int n_de_elites = n_individuos_populacao * taxa_de_elitismo;
 int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1;
 // Structs:
 struct Populacao{
@@ -44,12 +45,11 @@ Populacao cria_populacao_inicial(int min, int max){
     return Populacao_criada;
 }
 
-Populacao crossover(Populacao populacao){
+void realiza_crossover(Populacao &populacao){
     for(int individuo ; individuo < n_individuos_populacao ; individuo++){
     int posicao_bit = rand() % 32;
     populacao.individuos[individuo] ^= (1 << posicao_bit);
     }
-    return populacao;
 }
 
 int avalia_individuo(int valor_individuo){
@@ -57,7 +57,7 @@ int avalia_individuo(int valor_individuo){
     return nota;
 }
 
-Populacao elitismo(Populacao populacao){
+Populacao elitismo(Populacao &populacao){
     int lista_aux[n_individuos_populacao], aux;
     for(int i = 0 ; i < n_individuos_populacao ; i++){
         lista_aux[i] = avalia_individuo(populacao.individuos[i]);
@@ -82,7 +82,37 @@ Populacao elitismo(Populacao populacao){
         cout << lista_aux[i] << " | ";
     }
     cout << endl;
-    return populacao;
+    Populacao populacao_pais;
+    for(int i = 0 ; i < n_de_elites ; i++){
+        populacao_pais.individuos[i] = populacao.individuos[i];
+    }
+    return populacao_pais;
+}
+
+void cruza(Populacao &populacao_principal, Populacao &populacao_pais , float crossover){
+    // Determinar o ponto de cruzamento (metade do número de bits)
+    int n_bits = sizeof(int) * 8;
+    int crossover_point = n_bits * crossover;
+
+    for(int i = n_de_elites ; i < n_individuos_populacao ; i++){
+    // Criar uma máscara para selecionar a primeira metade dos bits
+    unsigned int mask = (1 << crossover_point) - 1;
+
+    // Sorteia os individuos que serão cruzados;
+    int individuo1 = rand() % (n_individuos_populacao); 
+    int individuo2 = 0;
+    do
+    {
+        individuo2 = rand() % (n_individuos_populacao);
+    } while (individuo2 == individuo1); // Garante que não vai cruzar um individuo com ele mesmo
+    
+    // Separar os bits das duas partes de cada indivíduo
+    int parte_1_individuo = populacao_principal.individuos[individuo1] & mask;
+    int parte_2_individuo = populacao_principal.individuos[individuo2] & ~mask;
+
+    // Combinar as duas partes para formar o novo indivíduo
+    populacao_pais.individuos[i] = parte_1_individuo | parte_2_individuo;
+    }
 }
 
 
@@ -125,9 +155,8 @@ int main(){
     }
     cout << endl;
     cout << "Lista de notas ordenada: " << endl;
-    Populacao Populacao_de_pais;
-    Populacao_principal = elitismo(Populacao_principal);
-    cout << "Lista principal ordenada: " << endl;
+    Populacao Populacao_de_pais = elitismo(Populacao_principal);
+    cout << "\nLista principal ordenada: " << endl;
     for (int i = 0; i < n_individuos_populacao ; i++){
         cout << Populacao_principal.individuos[i] << " | ";
     }
@@ -147,6 +176,15 @@ int main(){
          // aplicar mutaçao nos 9, com a chance dela ocorrer ou não.
          // Refazer o processo de avaliação.
     }*/
+    cout << "\nLista de pais :" << endl;
+    for (int i = 0; i < n_individuos_populacao ; i++){
+        cout << Populacao_de_pais.individuos[i] << " | ";
+    }
+    cruza(Populacao_principal, Populacao_de_pais, crossover);
+    cout << "\nLista de pais cruzada :" << endl;
+    for (int i = 0; i < n_individuos_populacao ; i++){
+        cout << Populacao_de_pais.individuos[i] << " | ";
+    }
     return 0;
 }
 
