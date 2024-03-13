@@ -1,7 +1,7 @@
 /*
 Integrantes do grupo:
 Gustavo Paiva                   RA:
-Gustavo Teixeira                RA:
+Gustavo Teixeira                RA: 2214047
 Luan E. Rinaldi                 RA: 2184611 
 Pedro Dezem                     RA:
 */  
@@ -27,14 +27,12 @@ Populacao cria_populacao(int min, int max){
 // 1 = identificar o bit dentro do int
 // 2 = mudar o bit dentro do int
 
-// por enquanto é isso?
-// ss
-
 
 int main(){
     srand(time(NULL));
     float crossover = 0 , mutacao = 0;
-    unsigned max_geracoes = 1 , rand_min= 0 , rand_max = 0;
+    unsigned max_geracoes = 1;
+    int rand_min= 0 , rand_max = 0;
     cout << "Qual será a taxa de crossover (0 -> 90%)? : ";
     cin >> crossover;
     cout << "Qual será a taxa de mutação (0 -> 90%)? : ";
@@ -45,7 +43,6 @@ int main(){
     cin >> rand_min;
     cout << "Qual será o valor máximo dos números gerados? :";
     cin >> rand_max;
-
     cout << endl;
     cout << "Taxa de crossover escolhida: " << crossover << " %" << endl;
     cout << "Taxa de mutação escolhida: " << mutacao << " %" << endl;
@@ -60,16 +57,18 @@ int main(){
     }
     cout << endl;
     for(int i = 0 ; i < max_geracoes ; i++){
-        // avaliar população
+        for(int n = 0 ; n < teste.n_individuos ; n++){
+            
+        }
         //if(){
-            // armazenar o melhor individuo ate o momento
+            
             //fórmula p/ comparação = a*pow(n,5)+b*pow(n,4)+c*pow(n,3)+d*pow(n,2)+e*n+f = 0 , a != 0
         //}
-        
-        // verificar se a solução está aceitável (se sim, encerrar laço)
-        // selecionar os melhores indivíduos
-        // aplicar cruzamento com crossover
-        // aplicar mutação
+
+         //verificar se a solução está aceitável (se sim, encerrar laço)
+         //selecionar os melhores indivíduos
+         //aplicar cruzamento com crossover
+         //aplicar mutação
     }
 
 }
