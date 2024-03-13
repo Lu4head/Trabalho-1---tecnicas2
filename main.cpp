@@ -11,18 +11,80 @@ Pedro Dezem                     RA:
 
 using namespace std;
 
+// Variáveis globais:
+const unsigned n_individuos_populacao = 10;
+const unsigned taxa_de_elitismo = 0.9;
+int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1;
+// Structs:
 struct Populacao{
-    static const unsigned n_individuos = 10;
-    int individuos[n_individuos];
+    int individuos[n_individuos_populacao] = {0};
 };
 
-Populacao cria_populacao(int min, int max){
-    Populacao Populacao_1;
-    for(int i = 0; i < Populacao_1.n_individuos; i++){
-        Populacao_1.individuos[i] = min + (rand() % (max - min + 1));
+// Definição das Funções:
+
+/*
+Funções necessárias:
+.cria_populacao_inicial();
+.int Avalia(char F[50]);
+.int Roleta(int K);
+.void Cruza(int F,int G,int H);
+.int Melhor(void);
+.int Soma(void);//Faz Parte Indiretamente Do Método Roleta.
+.void Elitismo(void);
+.void CompletaCruza(int F[1000],int L);
+.void Passa(void);
+.void CrossOver(void); // Muda um bit aleatoriamente
+*/ 
+
+Populacao cria_populacao_inicial(int min, int max){
+    Populacao Populacao_criada;
+    for(int i = 0; i < n_individuos_populacao; i++){
+        Populacao_criada.individuos[i] = min + (rand() % (max - min + 1));
     }
-    return Populacao_1;
+    return Populacao_criada;
 }
+
+Populacao crossover(Populacao populacao){
+    for(int individuo ; individuo < n_individuos_populacao ; individuo++){
+    int posicao_bit = rand() % 32;
+    populacao.individuos[individuo] ^= (1 << posicao_bit);
+    }
+    return populacao;
+}
+
+int avalia_individuo(int valor_individuo){
+    int nota = abs(a*pow(valor_individuo,5)+b*pow(valor_individuo,4)+c*pow(valor_individuo,3)+d*pow(valor_individuo,2)+e*valor_individuo+f);
+    return nota;
+}
+
+Populacao elitismo(Populacao populacao){
+    int lista_aux[n_individuos_populacao], aux;
+    for(int i = 0 ; i < n_individuos_populacao ; i++){
+        lista_aux[i] = avalia_individuo(populacao.individuos[i]);
+        cout << "Nota de " << populacao.individuos[i] << " é igual a : " << avalia_individuo(populacao.individuos[i]) << endl;
+    }
+    for (int i = 0; i < n_individuos_populacao - 1; i++) { // Bubble sort para organizar as maiores notas no começo da lista
+        for (int j = 0; j < n_individuos_populacao - i - 1; j++) {
+            if (lista_aux[j] > lista_aux[j + 1]) {
+                // Troca os elementos se estiverem na ordem errada
+                aux = lista_aux[j];
+                lista_aux[j] = lista_aux[j + 1];
+                lista_aux[j + 1] = aux;
+
+                aux = populacao.individuos[j];
+                populacao.individuos[j] = populacao.individuos[j + 1];
+                populacao.individuos[j + 1] = aux;
+            }
+        }
+    }
+
+    for (int i = 0; i < n_individuos_populacao ; i++){
+        cout << lista_aux[i] << " | ";
+    }
+    cout << endl;
+    return populacao;
+}
+
 
 // 1 = identificar o bit dentro do int
 // 2 = mudar o bit dentro do int
@@ -30,9 +92,12 @@ Populacao cria_populacao(int min, int max){
 
 int main(){
     srand(time(NULL));
+    // Variáveis:
     float crossover = 0 , mutacao = 0;
     unsigned max_geracoes = 1;
     int rand_min= 0 , rand_max = 0;
+    //
+    // Coleta parametros passados pelo usuário:
     cout << "Qual será a taxa de crossover (0 -> 90%)? : ";
     cin >> crossover;
     cout << "Qual será a taxa de mutação (0 -> 90%)? : ";
@@ -47,17 +112,27 @@ int main(){
     cout << "Taxa de crossover escolhida: " << crossover << " %" << endl;
     cout << "Taxa de mutação escolhida: " << mutacao << " %" << endl;
     cout << "Número máximo de gerações : " << max_geracoes << endl;
+    //
+    // Tranforma porcentagem de 0 - 100% para 0 - 1:
     crossover = crossover / 100;
     mutacao = mutacao / 100;
+    //
 
-    Populacao teste = cria_populacao(rand_min,rand_max);
+    Populacao Populacao_principal = cria_populacao_inicial(rand_min,rand_max);
     cout << "População Inicial: " << endl;
-    for(int i = 0 ; i < teste.n_individuos ; i++){
-        cout << teste.individuos[i] << " | ";
+    for(int i = 0 ; i < n_individuos_populacao ; i++){
+        cout << Populacao_principal.individuos[i] << " | ";
     }
     cout << endl;
-    for(int i = 0 ; i < max_geracoes ; i++){
-        for(int n = 0 ; n < teste.n_individuos ; n++){
+    cout << "Lista de notas ordenada: " << endl;
+    Populacao Populacao_de_pais;
+    Populacao_principal = elitismo(Populacao_principal);
+    cout << "Lista principal ordenada: " << endl;
+    for (int i = 0; i < n_individuos_populacao ; i++){
+        cout << Populacao_principal.individuos[i] << " | ";
+    }
+    /*for(int i = 0 ; i < max_geracoes ; i++){
+        for(int n = 0 ; n < n_individuos_populacao ; n++){
             
         }
         //if(){
@@ -71,8 +146,8 @@ int main(){
          // Criar filhos dos mesmos com o cruzamento (preencher o vetor novamente com esse cruzamento)
          // aplicar mutaçao nos 9, com a chance dela ocorrer ou não.
          // Refazer o processo de avaliação.
-    }
-
+    }*/
+    return 0;
 }
 
 // tamanho população
