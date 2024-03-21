@@ -1,9 +1,9 @@
 /*
 Integrantes do grupo:
-Gustavo Paiva                   RA:
+Gustavo Paiva                   RA: 2188714
 Gustavo Teixeira                RA: 2214047
 Luan E. Rinaldi                 RA: 2184611 
-Pedro Dezem                     RA:
+Pedro Dezem                     RA: 2224621
 */  
 
 #include <iostream>
@@ -19,11 +19,13 @@ const unsigned n_individuos_populacao = 1000; // Tamanho da população
 const float taxa_de_elitismo = 0.1; // Elites = Melhores indivíduos que serão passados pra prox geração sem serem alterados
 const int n_de_elites = n_individuos_populacao * taxa_de_elitismo;
 int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1; // Parâmetros da função
+
 // Structs:
 struct Populacao{
     int individuos[n_individuos_populacao] = {0};
 };
 
+// Funções:
 Populacao cria_populacao_inicial(int min, int max){
     Populacao Populacao_criada;
     for(int i = 0; i < n_individuos_populacao; i++){
@@ -40,7 +42,7 @@ unsigned avalia_individuo(int x){
 
 void ordena_populacao(Populacao &populacao){
     unsigned lista_notas[n_individuos_populacao];
-    int aux; // essa lista é meio q a lista das notas de cada individuo
+    int aux;
     for(int i = 0 ; i < n_individuos_populacao ; i++){
         lista_notas[i] = avalia_individuo(populacao.individuos[i]);
     }
@@ -65,7 +67,7 @@ Populacao elitismo(Populacao populacao){ // tenho q renomear a função dps, mas
     for(int i = 0 ; i < n_de_elites ; i++){ // n_de_elites é o numero de individuos * taxa_de_elites q a gente definir, no caso ta 10 * 0.1 = 1 individuo
         populacao_pais.individuos[i] = populacao.individuos[i]; // Faz o primeiro individuo da populacao_pais ser o com a melhor nota
     }
-    return populacao_pais; // Retorna a populacao_pais, q por enqnt tem só o melhor individuo e o resto é 0
+    return populacao_pais;
 }
 
 void cruza(Populacao &populacao_principal, Populacao &populacao_pais, float crossover){
@@ -97,11 +99,13 @@ void cruza(Populacao &populacao_principal, Populacao &populacao_pais, float cros
     }
 }
 
-void realiza_mutacao(Populacao &populacao){ 
-    for(int n = n_de_elites ; n < n_individuos_populacao ; n++){
-    int posicao_bit = rand() % 10; // Sorteia um bit dentre os 32 de um inteiro
-    populacao.individuos[n] ^= (1 << posicao_bit); // Altera esse bit
-    }// Ele faz um rand e essa alteração pra cada individuo da lista
+void realiza_mutacao(Populacao &populacao, int mutacao){ 
+    if(rand() % 101 <= mutacao){
+        for(int n = n_de_elites ; n < n_individuos_populacao ; n++){
+        int posicao_bit = rand() % 10; // Sorteia um bit dentre os 32 de um inteiro
+        populacao.individuos[n] ^= (1 << posicao_bit); // Altera esse bit
+        }// Ele faz um rand e essa alteração pra cada individuo da lista
+    }
 }
 
 
@@ -114,11 +118,11 @@ int main(){
     float crossover = 0 , mutacao = 0;
     unsigned max_geracoes = 1;
     int rand_min= 0 , rand_max = 0;
-    //
+    
     // Coleta parametros passados pelo usuário:
-    cout << "Qual será a taxa de crossover (0 -> 90%)? : ";
+    cout << "Qual será a taxa de crossover (0 -> 100%)? : ";
     cin >> crossover;
-    cout << "Qual será a taxa de mutação (0 -> 90%)? : ";
+    cout << "Qual será a taxa de mutação (0 -> 100%)? : ";
     cin >> mutacao;
     cout << "Quantas gerações serão analizadas? : ";
     cin >> max_geracoes;
@@ -126,55 +130,39 @@ int main(){
     cin >> rand_min;
     cout << "Qual será o valor máximo dos números gerados? : ";
     cin >> rand_max;
+    cout << "f(x) = ax^5 + bx^4 + cx^3 + dx^2 + ex + f" << endl;
+    cout << "Agora os parâmetros para a função (a,b,c,d,e,f) com a diferente de 0 : " << endl;
+    cin >> a >> b >> c >> d >> e >> f;
+    
     cout << endl;
     cout << "Taxa de crossover escolhida: " << crossover << " %" << endl;
     cout << "Taxa de mutação escolhida: " << mutacao << " %" << endl;
     cout << "Número máximo de gerações: " << max_geracoes << endl;
+    cout << "Função:" << endl;
+    cout << "f(x) = " << a << "x^5 + " << b << "x^4 + " << c << "x^3 + " << d << "x^2 + " << e << "x + " << f << endl;
     cout << endl;
-    cout << "Agora os parâmetros para a função (a,b,c,d,e,f) : " << endl;
-    cin >> a >> b >> c >> d >> e >> f;
-    //
+    
     // Tranforma porcentagem de 0 - 100% para 0 - 1:
     crossover = crossover / 100;
-    mutacao = mutacao / 100;
-    //
-    Populacao Populacao_principal = cria_populacao_inicial(rand_min,rand_max);
+    
+    Populacao Populacao_principal = cria_populacao_inicial(rand_min,rand_max); // Inicia primeira população
 
-    for(int m = 1 ; m <= max_geracoes ; m++){
-    ordena_populacao(Populacao_principal);
+    for(int m = 1 ; m <= max_geracoes ; m++){ // Executa o bloco de cógido de acordo com o n de gerações passados pelo usuário
 
-    Populacao Populacao_de_pais = elitismo(Populacao_principal);
+    ordena_populacao(Populacao_principal); // Ordena a população inicial de acordo com o quão proximo da raiz está o valor da função ao aplicar o indivuo nela
 
-    cruza(Populacao_principal, Populacao_de_pais, crossover);
+    Populacao Populacao_de_pais = elitismo(Populacao_principal); // Separa os n melhores individuos em uma segunda lista
 
-    realiza_mutacao(Populacao_de_pais);      
-    // cout << "Lista de pais da geração " << m << " , antes :" << endl;
-    // for(int i = 0; i < n_individuos_populacao; i++){
-    //     cout << Populacao_de_pais.individuos[i] << " | ";
-    // }
-    // cout << endl;
-    // cout << "Lista principal da geração " << m << " , antes :" << endl;
-    // for(int i = 0; i < n_individuos_populacao; i++){
-    //     cout << Populacao_principal.individuos[i] << " | ";
-    // }
-    // cout << endl;
-    // Troca população_principal dessa geração para a principal da proxima
-    for(int i = 0; i < n_individuos_populacao; i++){
+    cruza(Populacao_principal, Populacao_de_pais, crossover); // Cruza os melhores individuos
+
+    realiza_mutacao(Populacao_de_pais, mutacao); // Altera bits aleatóriamente nos individuos gerados após o cruzamento       
+
+    for(int i = 0; i < n_individuos_populacao; i++){ // Faz com que a nova lista principal seja a lista com os individuos pós cruzamento e mutação, preparando para a prox geração
         Populacao_principal.individuos[i] = Populacao_de_pais.individuos[i];
         Populacao_de_pais.individuos[i] = 0;
+        }
     }
 
-    // cout << "Lista de pais da geração " << m << " :" << endl;
-    // for(int i = 0; i < n_individuos_populacao; i++){
-    //     cout << Populacao_de_pais.individuos[i] << " | ";
-    // }
-    // cout << endl;
-    // cout << "Lista principal da geração " << m << " :" << endl;
-    // for(int i = 0; i < n_individuos_populacao; i++){
-    //     cout << Populacao_principal.individuos[i] << " | ";
-    // }
-    // cout << endl;
-    }
-    cout << "O indivíduo: " << Populacao_principal.individuos[0] << " foi quem teve o melhor resultado, com nota: " << avalia_individuo(Populacao_principal.individuos[0]) << endl; 
+    cout << "O indivíduo: " << Populacao_principal.individuos[0] << " foi quem teve o melhor resultado, com nota: " << avalia_individuo(Populacao_principal.individuos[0]) << endl;
     return 0;
 }
