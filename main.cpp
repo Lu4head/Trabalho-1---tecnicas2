@@ -100,10 +100,10 @@ void cruza(Populacao &populacao_principal, Populacao &populacao_pais, float cros
 }
 
 void realiza_mutacao(Populacao &populacao, int mutacao){ 
-    if(rand() % 101 <= mutacao){
-        for(int n = n_de_elites ; n < n_individuos_populacao ; n++){
-        int posicao_bit = rand() % 10; // Sorteia um bit dentre os 32 de um inteiro
-        populacao.individuos[n] ^= (1 << posicao_bit); // Altera esse bit
+    for(int n = n_de_elites ; n < n_individuos_populacao ; n++){
+        if(rand() % 101 <= mutacao){
+            int posicao_bit = rand() % 10; // Sorteia um bit dentre os 32 de um inteiro
+            populacao.individuos[n] ^= (1 << posicao_bit); // Altera esse bit
         }// Ele faz um rand e essa alteração pra cada individuo da lista
     }
 }
