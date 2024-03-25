@@ -149,23 +149,23 @@ int main(){
 
     for(int m = 1 ; m <= max_geracoes ; m++){ // Executa o bloco de cógido de acordo com o n de gerações passados pelo usuário
 
-    ordena_populacao(Populacao_principal); // Ordena a população inicial de acordo com o quão proximo da raiz está o valor da função ao aplicar o indivuo nela
+        ordena_populacao(Populacao_principal); // Ordena a população inicial de acordo com o quão proximo da raiz está o valor da função ao aplicar o indivuo nela
 
-    Populacao Populacao_de_pais = elitismo(Populacao_principal); // Separa os n melhores individuos em uma segunda lista
+        Populacao Populacao_de_pais = elitismo(Populacao_principal); // Separa os n melhores individuos em uma segunda lista
 
-    cruza(Populacao_principal, Populacao_de_pais, crossover); // Cruza os melhores individuos
+        cruza(Populacao_principal, Populacao_de_pais, crossover); // Cruza os melhores individuos
 
-    realiza_mutacao(Populacao_de_pais, mutacao); // Altera bits aleatóriamente nos individuos gerados após o cruzamento       
+        realiza_mutacao(Populacao_de_pais, mutacao); // Altera bits aleatóriamente nos individuos gerados após o cruzamento       
 
-    for(int i = 0; i < n_individuos_populacao; i++){  // Faz com que a nova lista principal seja a lista com os individuos pós cruzamento e mutação, preparando para a prox geração
-        if(avalia_individuo(Populacao_principal.individuos[i]) == 0){
-            cout << "Sua função chegou ao numero esperado, na geração: " << m << ", O individuo foi: " << i << endl;
-            return 0;
+        for(int i = 0; i < n_individuos_populacao; i++){  // Faz com que a nova lista principal seja a lista com os individuos pós cruzamento e mutação, preparando para a prox geração
+            if(avalia_individuo(Populacao_principal.individuos[i]) == 0){
+                cout << "Sua função chegou ao resultado ideal , na geração: " << m << "º. O individuo com melhor resultado foi: " << Populacao_principal.individuos[i] << " , que gerou o resultado " << avalia_individuo(Populacao_principal.individuos[i])<< endl;
+                return 0;
+            }
+            Populacao_principal.individuos[i] = Populacao_de_pais.individuos[i];
+            Populacao_de_pais.individuos[i] = 0;
+            }
         }
-        Populacao_principal.individuos[i] = Populacao_de_pais.individuos[i];
-        Populacao_de_pais.individuos[i] = 0;
-        }
-    }
-    cout << "O indivíduo: " << Populacao_principal.individuos[0] << " foi quem teve o melhor resultado, com nota: " << avalia_individuo(Populacao_principal.individuos[0]) << endl;
+        cout << "O indivíduo com melhor resultado foi : " << Populacao_principal.individuos[0] << " , gerando a resposta: " << avalia_individuo(Populacao_principal.individuos[0]) << endl;
     return 0;
 }
