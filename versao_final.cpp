@@ -15,7 +15,7 @@ Pedro Dezem                     RA: 2224621
 using namespace std;
 
 // Variáveis globais:
-const unsigned n_individuos_populacao = 1000; // Tamanho da população
+const short n_individuos_populacao = 1000; // Tamanho da população
 const float taxa_de_elitismo = 0.1; // Elites = Melhores indivíduos que serão passados pra prox geração sem serem alterados
 const int n_de_elites = n_individuos_populacao * taxa_de_elitismo;
 int a = 1, b = 1, c = 1, d = 1, e = 1, f = 1; // Parâmetros da função
@@ -34,7 +34,7 @@ Populacao cria_populacao_inicial(int min, int max){
     return Populacao_criada;
 }
 
-unsigned avalia_individuo(int x){ 
+unsigned avalia_individuo(int x){ // Avalia se um indivíduo é ou não bom de acordo com o quão próximo da raíz da função é o resultado que ele gera ao ser aplicado na função
     int formula = a * pow(x, 5) + b * pow(x, 4) + c * pow(x, 3) + d * pow(x, 2) + e * x + f;
     unsigned nota = abs(formula);
     return nota;
@@ -50,11 +50,11 @@ void ordena_populacao(Populacao &populacao){
         for (int j = 0; j < n_individuos_populacao - i - 1; j++) {
             if (lista_notas[j] > lista_notas[j + 1]) {
                 // Troca os elementos se estiverem na ordem errada
-                aux = lista_notas[j]; 
+                aux = lista_notas[j]; // Ordena a lista de notas
                 lista_notas[j] = lista_notas[j + 1];
                 lista_notas[j + 1] = aux;
 
-                aux = populacao.individuos[j]; // Essa parte ordena a lista original de individuos
+                aux = populacao.individuos[j]; // Ordena a lista original de individuos
                 populacao.individuos[j] = populacao.individuos[j + 1];
                 populacao.individuos[j + 1] = aux;
             }
@@ -62,10 +62,10 @@ void ordena_populacao(Populacao &populacao){
     }
 }
 
-Populacao elitismo(Populacao populacao){ // tenho q renomear a função dps, mas ela basicamente ordena a lista pela nota e separa os individuos melhores q n serão alterados
+Populacao elitismo(Populacao populacao){ // Armezana os melhores indivíduos em uma segunda lista que será usada para criar a próxima geração
     Populacao populacao_pais; 
-    for(int i = 0 ; i < n_de_elites ; i++){ // n_de_elites é o numero de individuos * taxa_de_elites q a gente definir, no caso ta 10 * 0.1 = 1 individuo
-        populacao_pais.individuos[i] = populacao.individuos[i]; // Faz o primeiro individuo da populacao_pais ser o com a melhor nota
+    for(int i = 0 ; i < n_de_elites ; i++){ // n_de_elites é o numero de individuos * taxa_de_elites
+        populacao_pais.individuos[i] = populacao.individuos[i];
     }
     return populacao_pais;
 }
@@ -166,12 +166,12 @@ int main(){
         realiza_mutacao(Populacao_de_pais, mutacao); // Altera bits aleatóriamente nos individuos gerados após o cruzamento       
 
         for(int i = 0; i < n_individuos_populacao; i++){  // Faz com que a nova lista principal seja a lista com os individuos pós cruzamento e mutação, preparando para a prox geração
-            if(avalia_individuo(Populacao_principal.individuos[i]) == 0){
-                cout << "Sua função chegou ao resultado ideal , na geração: " << m << "º. O individuo com melhor resultado foi: " << Populacao_principal.individuos[i] << " , que gerou o resultado " << avalia_individuo(Populacao_principal.individuos[i])<< endl;
-                return 0;
-            }
             Populacao_principal.individuos[i] = Populacao_de_pais.individuos[i];
             Populacao_de_pais.individuos[i] = 0;
+              if(avalia_individuo(Populacao_principal.individuos[i]) == 0){
+                cout << "Sua função chegou ao resultado ideal , na geração: " << m << "º. O individuo com melhor resultado foi: " << Populacao_principal.individuos[i] << " , que gerou o resultado " << avalia_individuo(Populacao_principal.individuos[i])<< endl;
+                return 0;
+              }
             }
         }
         cout << "O indivíduo com melhor resultado foi : " << Populacao_principal.individuos[0] << " , gerando a resposta: " << avalia_individuo(Populacao_principal.individuos[0]) << endl;
