@@ -131,8 +131,16 @@ int main(){
     cout << "Qual será o valor máximo dos números gerados? : ";
     cin >> rand_max;
     cout << "f(x) = ax^5 + bx^4 + cx^3 + dx^2 + ex + f" << endl;
-    cout << "Agora os parâmetros para a função (a,b,c,d,e,f) com a diferente de 0 : " << endl;
-    cin >> a >> b >> c >> d >> e >> f;
+    do {
+        cout << "Agora os parâmetros para a função (a,b,c,d,e,f) com a diferente de 0 : " << endl;
+        cin >> a;
+
+        if(a == 0) {
+            cout << "O valor de 'a' não pode ser zero. Por favor, insira um número diferente de zero." << endl;
+        }
+        
+    } while(a == 0);
+    cin >> b >> c >> d >> e >> f;
     
     cout << endl;
     cout << "Taxa de crossover escolhida: " << crossover << " %" << endl;
